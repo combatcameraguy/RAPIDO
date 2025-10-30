@@ -1211,6 +1211,59 @@
         calculatePrice();
         updateItemizedList();
         
+        // Initialize FREE Address Autocomplete (no API key needed!)
+        // Uses saved addresses from previous submissions
+        function initAddressAutocomplete() {
+            const input = document.getElementById('serviceAddress');
+            const datalist = document.createElement('datalist');
+            datalist.id = 'addressSuggestions';
+            input.setAttribute('list', 'addressSuggestions');
+            input.parentNode.insertBefore(datalist, input.nextSibling);
+            
+            // Load saved addresses from localStorage
+            const savedAddresses = JSON.parse(localStorage.getItem('rapidoAddresses') || '[]');
+            savedAddresses.forEach(addr => {
+                const option = document.createElement('option');
+                option.value = addr;
+                datalist.appendChild(option);
+            });
+            
+            // Add common Lawton, OK areas as suggestions
+            const commonAreas = [
+                'Lawton, OK',
+                'Fort Sill, OK',
+                'Cache, OK',
+                'Elgin, OK',
+                'Medicine Park, OK'
+            ];
+            
+            commonAreas.forEach(area => {
+                if (!savedAddresses.includes(area)) {
+                    const option = document.createElement('option');
+                    option.value = area;
+                    datalist.appendChild(option);
+                }
+            });
+        }
+        
+        // Save address to history when form is submitted
+        function saveAddressToHistory(address) {
+            if (address && address.trim()) {
+                const savedAddresses = JSON.parse(localStorage.getItem('rapidoAddresses') || '[]');
+                if (!savedAddresses.includes(address)) {
+                    savedAddresses.unshift(address); // Add to beginning
+                    // Keep only last 20 addresses
+                    if (savedAddresses.length > 20) {
+                        savedAddresses.pop();
+                    }
+                    localStorage.setItem('rapidoAddresses', JSON.stringify(savedAddresses));
+                }
+            }
+        }
+        
+        // Initialize on page load
+        initAddressAutocomplete();
+        
         // Auto-update on changes
         document.getElementById('quoteForm').addEventListener('change', function() {
             calculatePrice();
@@ -1353,9 +1406,10 @@
                 const quoteData = {
                     task: projectName,
                     clientName: clientName,
+                    address: document.getElementById('serviceAddress').value || '',
                     person: '',
-                    status: 'Not started',
-                    priority: isUrgent ? 'High' : 'Standard',
+                    status: 'Pending',
+                    priority: isUrgent ? 'High' : 'Medium',
                     requestDate: new Date().toISOString().split('T')[0],
                     dueDate: '',
                     actualWorkHours: '0',
@@ -1371,6 +1425,9 @@
                 // Submit to Firebase
                 const requestRef = database.ref('requests').push();
                 await requestRef.set(quoteData);
+                
+                // Save address to history for future autocomplete
+                saveAddressToHistory(document.getElementById('serviceAddress').value);
                 
                 // Success
                 successMsg.classList.add('show');
