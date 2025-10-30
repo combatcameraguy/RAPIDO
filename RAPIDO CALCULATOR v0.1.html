@@ -23,13 +23,12 @@
     <script>
         // Your web app's Firebase configuration
         const firebaseConfig = {
-            apiKey: "AIzaSyDSLjUPp5hBkGDQnrIGL4iWDUNJC-YVXoY",
-            authDomain: "comcam-dashboard.firebaseapp.com",
-            databaseURL: "https://comcam-dashboard-default-rtdb.firebaseio.com",
-            projectId: "comcam-dashboard",
-            storageBucket: "comcam-dashboard.firebasestorage.app",
-            messagingSenderId: "182412134495",
-            appId: "1:182412134495:web:c69ca799affda0559983ea"
+            apiKey: "AIzaSyDvYPFm6PtVXKc01Uo1_CMGqrWFp_oXbm0",
+            authDomain: "rapido-dashboard.firebaseapp.com",
+            projectId: "rapido-dashboard",
+            storageBucket: "rapido-dashboard.firebasestorage.app",
+            messagingSenderId: "917389932203",
+            appId: "1:917389932203:web:dac142f05ed07d21ee69ee"
         };
 
         // Initialize Firebase
@@ -827,27 +826,6 @@
     </div>
     
     <script>
-        // Firebase configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyDGpAUxLNre6kvt7F3PWd4CJpxPXVwpEyo",
-            authDomain: "comcam-app.firebaseapp.com",
-            databaseURL: "https://comcam-app-default-rtdb.firebaseio.com",
-            projectId: "comcam-app",
-            storageBucket: "comcam-app.appspot.com",
-            messagingSenderId: "1062843194724",
-            appId: "1:1062843194724:web:8b9c9e4d3c9e4d3c9e4d3c"
-        };
-        
-        // Initialize Firebase
-        let database;
-        try {
-            firebase.initializeApp(firebaseConfig);
-            database = firebase.database();
-            console.log('Firebase initialized successfully');
-        } catch (error) {
-            console.error('Firebase initialization error:', error);
-        }
-        
         // Toggle checkbox when clicking the group
         function toggleCheckbox(checkboxId) {
             const checkbox = document.getElementById(checkboxId);
