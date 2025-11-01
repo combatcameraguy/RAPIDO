@@ -5,6 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RAPIDO Handyman Quote Request</title>
     
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@700;800&display=swap" rel="stylesheet">
+    
     <!-- PWA Metadata -->
     <meta name="description" content="Request a quote for professional handyman services in Lawton, Oklahoma">
     <meta name="theme-color" content="#d97706">
@@ -67,10 +72,33 @@
         }
         
         .header h1 {
-            font-size: 32px;
+            font-size: 48px;
             margin-bottom: 5px;
-            font-weight: bold;
-            letter-spacing: 1px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            font-family: 'Kanit', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        .header h1 .icon {
+            font-size: 42px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        .header h1 .lightning {
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+        }
+        
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.1);
+            }
         }
         
         .header .subtitle {
@@ -430,7 +458,13 @@
             }
             
             .header h1 {
-                font-size: 24px;
+                font-size: 36px;
+                letter-spacing: 2px;
+                gap: 10px;
+            }
+            
+            .header h1 .icon {
+                font-size: 32px;
             }
             
             .price-row.total {
@@ -447,7 +481,11 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>🔧 RAPIDO</h1>
+            <h1>
+                <span class="icon lightning">⚡</span>
+                RAPIDO
+                <span class="icon">🔧</span>
+            </h1>
             <div class="subtitle">Professional Handyman Services</div>
             <p>Lawton, Oklahoma | 6 Years Experience | Get Your Quote Now</p>
         </div>
