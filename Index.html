@@ -772,6 +772,16 @@
                         <label><strong>🚨 URGENT SERVICE (Next Day) +25%</strong></label>
                     </div>
                     
+                    <div class="checkbox-group">
+                        <input type="checkbox" id="materials">
+                        <label>Materials Needed (We'll purchase and add receipt to invoice)</label>
+                    </div>
+                    <div id="materialsOptions" class="sub-options">
+                        <div class="form-group">
+                            <label>Estimated Materials Cost</label>
+                            <input type="number" id="materialsCost" min="0" max="10000" value="0" step="10" placeholder="Enter estimated cost">
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Price Summary -->
@@ -779,6 +789,10 @@
                     <div class="price-row">
                         <span>Base Services:</span>
                         <span id="basePrice">$0</span>
+                    </div>
+                    <div class="price-row">
+                        <span>Materials:</span>
+                        <span id="materialsPrice">$0</span>
                     </div>
                     <div class="price-row" id="urgentRow" style="display: none;">
                         <span>Urgent Service Fee (+25%):</span>
@@ -852,8 +866,8 @@
             // Kitchen Cabinets
             if (document.getElementById('kitchenCabinets').checked) {
                 const count = parseInt(document.getElementById('cabinetCount').value) || 5;
-                // $40 per cabinet
-                baseTotal += count * 40;
+                // $45 per cabinet (1.5 hours each at $30/hr)
+                baseTotal += count * 45;
             }
             
             // Bathroom Work
@@ -926,7 +940,7 @@
             // Tree Service
             if (document.getElementById('treeService').checked) {
                 const type = document.getElementById('treeServiceType').value;
-                const prices = { trimming: 120, shrubs: 180, removal: 300, major: 450 };
+                const prices = { trimming: 120, shrubs: 210, removal: 300, major: 450 };
                 baseTotal += prices[type] || 0;
             }
             
@@ -961,8 +975,14 @@
                 baseTotal += prices[scope] || 0;
             }
             
+            // Materials
+            let materialsTotal = 0;
+            if (document.getElementById('materials').checked) {
+                materialsTotal = parseFloat(document.getElementById('materialsCost').value) || 0;
+            }
+            
             // Calculate totals
-            let subtotal = baseTotal;
+            let subtotal = baseTotal + materialsTotal;
             let urgentFee = 0;
             
             // Urgent service fee
@@ -977,6 +997,7 @@
             
             // Update display
             document.getElementById('basePrice').textContent = '$' + baseTotal.toLocaleString();
+            document.getElementById('materialsPrice').textContent = '$' + materialsTotal.toLocaleString();
             document.getElementById('urgentPrice').textContent = '$' + urgentFee.toLocaleString();
             document.getElementById('totalPrice').textContent = '$' + finalTotal.toLocaleString();
         }
@@ -989,8 +1010,8 @@
             // Kitchen Cabinets
             if (document.getElementById('kitchenCabinets').checked) {
                 const count = parseInt(document.getElementById('cabinetCount').value) || 5;
-                const price = count * 40;
-                items.push({ name: `Kitchen Cabinet Installation (${count} cabinets @ $40 each)`, price: price });
+                const price = count * 45;
+                items.push({ name: `Kitchen Cabinet Installation (${count} cabinets @ $45 each)`, price: price });
             }
             
             // Bathroom Work
@@ -1034,8 +1055,8 @@
             // Floodlights
             if (document.getElementById('floodlights').checked) {
                 const count = parseInt(document.getElementById('floodlightCount').value) || 2;
-                const price = count * 60;
-                items.push({ name: `Floodlight Installation (${count} lights @ $60 each)`, price: price });
+                const price = count * 75;
+                items.push({ name: `Floodlight Installation (${count} lights @ $75 each)`, price: price });
             }
             
             // Light Fixtures
@@ -1099,7 +1120,7 @@
             // Tree Service
             if (document.getElementById('treeService').checked) {
                 const type = document.getElementById('treeServiceType').value;
-                const prices = { trimming: 120, shrubs: 180, removal: 300, major: 450 };
+                const prices = { trimming: 120, shrubs: 210, removal: 300, major: 450 };
                 const labels = { 
                     trimming: 'Tree Trimming', 
                     shrubs: 'Shrubs/Small Trees Service', 
@@ -1157,6 +1178,14 @@
                     heavy: 'Heavy Yard Cleanup' 
                 };
                 items.push({ name: labels[scope], price: prices[scope] });
+            }
+            
+            // Materials
+            if (document.getElementById('materials').checked) {
+                const cost = parseFloat(document.getElementById('materialsCost').value) || 0;
+                if (cost > 0) {
+                    items.push({ name: 'Materials (estimated)', price: cost });
+                }
             }
             
             // Urgent Fee
@@ -1353,6 +1382,10 @@
                 if (document.getElementById('yardCleanup').checked) {
                     const scope = document.getElementById('cleanupScope').value;
                     services.push(`Yard Cleanup - ${scope}`);
+                }
+                if (document.getElementById('materials').checked) {
+                    const cost = document.getElementById('materialsCost').value;
+                    services.push(`Materials needed - $${cost} estimated`);
                 }
                 
                 const isUrgent = document.getElementById('urgent').checked;
